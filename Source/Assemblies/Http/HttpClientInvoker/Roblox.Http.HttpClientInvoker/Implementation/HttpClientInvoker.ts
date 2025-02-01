@@ -87,7 +87,7 @@ export class HttpClientInvoker {
 			Http.request({
 				url: requestUrl,
 				method: requestMethod,
-				httpsAgent: new SSL.Agent({ rejectUnauthorized: false }),
+				httpsAgent: new SSL.Agent({ rejectUnauthorized: true }),
 				headers: {
 					...this.request.AdditionalHeaders,
 					'User-Agent': `Roblox/ServiceClientInvokerTypescript ${
