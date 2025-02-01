@@ -30,7 +30,7 @@ export class AbTestingClient {
 				headers: {
 					Cookie: `.ROBLOSECURITY=${UserAuthToken}`,
 				},
-				httpsAgent: new https.Agent({ rejectUnauthorized: false }),
+				httpsAgent: new https.Agent({ rejectUnauthorized: true }),
 			})
 				.then((Response) => {
 					resumeFunction([true, JSON.stringify(Response.data), Response.status]);
