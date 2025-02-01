@@ -3,6 +3,7 @@ import { BaseURL } from '../../../../Common/Roblox.Common/BaseUrl';
 import { __baseDirName } from '../../../../Common/Constants/Roblox.Common.Constants/Directories';
 import { DYNAMIC_FASTFLAGVARIABLE, DYNAMIC_FASTSTRINGVARIABLE, DFFlag, DFString } from '../Logging/FastLog';
 import filestream from 'fs';
+import path from 'path';
 
 DYNAMIC_FASTFLAGVARIABLE('DoesTheWorldGetToViewTheSite', false);
 DYNAMIC_FASTFLAGVARIABLE('CanAdminsBypassTheSystem', false);
@@ -44,10 +45,15 @@ export class CommonValidator<TResponse extends Response> {
 
 	public IsFileStaticFile(baseUrl: string, file: string) {
 		return new Promise((resumeFunction) => {
-			const url = `${__baseDirName}${!baseUrl.startsWith('/') ? '/' : ''}${baseUrl}${
+			const constructedPath = `${__baseDirName}${!baseUrl.startsWith('/') ? '/' : ''}${baseUrl}${
 				baseUrl.endsWith('/') && file.startsWith('/') ? file.replace('/', '') : file
 			}`;
-			filestream.stat(url, function (_error, fileStats) {
+			const normalizedPath = path.resolve(constructedPath);
+			if (!normalizedPath.startsWith(__baseDirName)) {
+				resumeFunction(false);
+				return;
+			}
+			filestream.stat(normalizedPath, function (_error, fileStats) {
 				resumeFunction(fileStats && fileStats.isFile());
 			});
 		});
