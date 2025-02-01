@@ -29,6 +29,7 @@ import { Request, Response } from 'express';
 import { DFString, DYNAMIC_FASTSTRINGVARIABLE } from '../../../../Assemblies/Web/Util/Roblox.Web.Util/Logging/FastLog';
 import { DateTimeConverter } from '../../../../Assemblies/Web/Util/Roblox.Web.Util/Converters/DateTimeConverter';
 import { HashingClient } from '../../../../Assemblies/Data/Hashing/Roblox.Data.Hashing/HashingClient';
+import escapeHtml from 'escape-html';
 
 DYNAMIC_FASTSTRINGVARIABLE('CharacterAppearanceUrl', 'http://assetgame.sitetest4.robloxlabs.com/Asset/CharacterFetch.ashx');
 
@@ -39,7 +40,7 @@ export default {
 		const date = DateTimeConverter.DateToLocaleDate(new Date(Date.now()));
 		const txt = {
 			ClientPort: 0,
-			MachineAddress: request.query['IpAddress'] || '127.0.0.1',
+			MachineAddress: escapeHtml(request.query['IpAddress'] || '127.0.0.1'),
 			ServerPort: parseInt(<string>request.query['port']) || 53640,
 			PingUrl: '',
 			PingInterval: 120,

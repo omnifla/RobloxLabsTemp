@@ -1,4 +1,5 @@
 import { Response } from 'express';
+import escapeHtml from 'escape-html';
 import filestream from 'fs';
 import crypto from 'crypto';
 import { __baseDirName } from '../../../Common/Constants/Roblox.Common.Constants/Directories';
@@ -23,8 +24,9 @@ export class HashingClient {
 	}
 
 	public SendSignedResponse(data: string) {
-		const splitter = '\r\n' + data;
-		const sig = HashingClient.GetSignedData(data, 'sha1');
+		const sanitizedData = escapeHtml(data);
+		const splitter = '\r\n' + sanitizedData;
+		const sig = HashingClient.GetSignedData(sanitizedData, 'sha1');
 		const out = `--rbxsig%${sig}%${splitter}`;
 		this._response.contentType('text/plain');
 		this._response.send(out);
